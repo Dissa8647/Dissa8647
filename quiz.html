@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Technologie Alimentaire</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .container { width: 50%; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .hidden { display: none; }
+        .question { margin-bottom: 20px; text-align: left; }
+        button { padding: 10px 20px; margin: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #218838; }
+        .result-message { font-size: 1.2em; font-weight: bold; }
+        .animated { animation: fadeIn 1s ease-in-out; }
+        .incorrect-answers { margin-top: 20px; color: red; font-weight: bold; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenue sur le Quiz Technologie Alimentaire</h1>
+        <p>Ce site a pour but de tester et d’améliorer vos connaissances en technologie alimentaire.</p>
+        <p>À travers ce quiz, vous découvrirez des notions essentielles sur la classification des aliments, leurs propriétés et les procédés technologiques utilisés dans l’industrie agroalimentaire.</p>
+        <p>Ce site web est développer par <strong><mark>Salia Dissa</mark></strong> (Etudiant à l'institut des sciences appliquées)
+        <p>Répondez aux questions et découvrez votre niveau !</p>
+        <h2><mark>Salia Dissa vous souhaite bonne chance !</mark></h2>
+        <p>Testez vos connaissances en répondant aux 13 questions suivantes.</p>
+        <button id="startButton">Commencer le quiz</button>
+        
+        <div id="quiz" class="hidden">
+            <form id="quizForm">
+                <div id="questions"></div>
+                <button type="button" id="submitQuiz">Soumettre</button>
+            </form>
+        </div>
+        
+        <div id="result" class="hidden animated"></div>
+        <div id="incorrectAnswers" class="hidden incorrect-answers"></div>
+    </div>
+    
+    <script>
+        const questions = [
+            { q: "Quels sont les critères de classification des aliments?", options: ["Sa composition", "Couleur", "Taille", "Prix"], correct: 0 },
+            { q: "Indiquer le pourcentage d'eau dans le corps humain", options: ["50%", "60%", "70%", "80%"], correct: 1 },
+            { q: "Définir un macroélément et donner 2 exemples", options: ["Élément en faible quantité, comme le fer et le cuivre", "Élément en grande quantité, comme calcium et phosphore", "Composant énergétique, comme glucide et lipide",], correct: 1 },
+            { q: "Quelles sont les différentes formes d'aliment?", options: ["Solide, liquide, gazeux", "Rond, carré, plat", "Chaud, froid", "Simple et composé"], correct: 3 },
+            { q: "Quels sont les états physiques des aliments?", options: ["Solide, liquide", "Solide, liquide, gazeux", "Solide, liquide, visqueux"], correct: 0 },
+            { q: "Citer les constituants d'aliments non énergétiques", options: ["Glucide, lipide", "Vitamines, sel minéraux, fibres", "Vitamines, minéraux, acide gras insaturé"], correct: 1},
+            { q: "Définir l'eau liée à l'aliment", options: ["L'eau présente sous forme libre et qui s'évapore facilement", "L'eau retenue par les macromolécules et non directement disponible", "L'eau ajoutée artificiellement lors de la transformation des aliments"], correct: 1 },
+            { q: "Définir l'eau libre de l'aliment", options:["L'eau présente sous forme libre et qui s'évapore facilement", "L'eau qui ne participe pas aux réactions enzymatiques ni à la croissance microbienne", "L'eau qu'on trouve dans les emballages"], correct: 0 },
+            { q: "Quel est le but de la pasteurisation?", options: ["Améliorer la couleur et la texture des aliments", "Augmenter la teneur en vitamines et en minéraux","Détruire les microorganismes pathogènes tout en conservant les qualités nutritionnelles des aliments"], correct: 2 },
+            { q: "Pourquoi l'ajout de sel et sucre permet-il une plus longue conservation des aliments?", options: ["Ils augmentent l'humidité des aliments","Ils empêchent la croissance des microorganismes", "Ils rendent les aliments plus lourds"], correct: 1 },
+            { q: "Quels acides gras doit-on privilégier dans l'alimentation quotidienne?", options: ["Acides gras saturés","Acides gras trans","Acides gras hydrogénés", "Acides gras mono-insaturés et polyinsaturés"], correct: 3 },
+            { q: "Comment protéger les arômes?", options:["En ajoutant des additifs et en les stockant à température ambiante", "En utilisant des emballages hermétiques et en stockant dans un endroit frais et sec","En les stockant dans des récipients ouverts et en les réfrigérant"], correct: 1 },
+            { q: "Quelles sont les causes du brunissement enzymatique?", options: ["La réaction entre les sucres et les protéines à haute température", "L'oxydation des composés phénoliques en présence d'enzymes", "Dégradation des lipides en présence de lumière."], correct: 1 }
+        ];
+        
+        document.getElementById("startButton").addEventListener("click", startQuiz);
+        document.getElementById("submitQuiz").addEventListener("click", submitQuiz);
+        
+        function startQuiz() {
+            document.getElementById("startButton").classList.add("hidden");
+            document.getElementById("quiz").classList.remove("hidden");
+            document.getElementById("quiz").classList.add("animated");
+            const questionsContainer = document.getElementById("questions");
+            questionsContainer.innerHTML = "";
+            
+            questions.forEach((question, index) => {
+                const div = document.createElement("div");
+                div.classList.add("question");
+                div.innerHTML = `<p>${index + 1}. ${question.q}</p>`;
+                
+                question.options.forEach((option, i) => {
+                    div.innerHTML += `<label><input type="radio" name="q${index}" value="${i}"> ${option}</label><br>`;
+                });
+                
+                questionsContainer.appendChild(div);
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            questions.forEach((question, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === question.correct) {
+                    score++;
+                }
+            });
+            
+            let message = "";
+            if (score <= 3) message = "Tu peux t’entraîner pour t’améliorer";
+            else if (score <= 7) message = "Tu peux mieux faire";
+            else if (score <= 11) message = "Bravo, tu as une base solide en technologie alimentaire";
+            else message = "Excellent, tu es un vrai champion ! Salia Dissa te félicite !";
+            
+            document.getElementById("result").innerHTML = `Score: ${score}/13 <br> ${message}`;
+            document.getElementById("result").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
